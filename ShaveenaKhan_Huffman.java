@@ -1,0 +1,517 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package shaveenakhan_project;
+
+import java.awt.Color;
+import java.awt.*;
+import java.util.HashMap;
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.WindowEvent;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+/**
+ *
+ * @author User
+ */
+public class ShaveenaKhan_Huffman extends javax.swing.JFrame {
+
+    /**
+     * Creates new form ShaveenaKhan_Huffman
+     */
+    public static String content;
+        public static String file_path;
+        public static int w=0,j=0,count,z=0,l=0;
+	public static String s = "";
+        public static String letterbin = "";
+        public static String letterfreq = "";
+        public static String decodedstr = "";
+	public static char huffman[];
+	public static String binary[];
+	public static int arr[] = new int[100001];
+        public static ArrayNode a[];
+        public static String newdata="";
+	
+        public static Map<Character, String> binformat = new HashMap<Character, String>();
+        
+        
+        
+    public ShaveenaKhan_Huffman() {    
+        initComponents();
+        getContentPane().setBackground(Color.PINK);
+    }
+
+    
+    public ShaveenaKhan_Huffman(int count){
+        initComponents(); //built-in gui window method
+        huffman=new char[count+1]; //char Array
+        binary=new String[count+1]; //String Array
+    }
+    public void close(){   //This "function Code" helps close button to work
+        WindowEvent CloseWindow = new  WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(CloseWindow);
+    }
+    
+    
+    // A recursive method to heapify a subtree with the root at given index
+    static void minheapify(ArrayNode a[],int k)
+	{
+           
+		int l=2*k;  
+		int r=2*k+1;  
+		int min;
+                
+              
+		if(l<=count && a[l].frequency<a[k].frequency)  
+		min=l; 
+		else
+		min=k;
+                
+                
+		if(r<count && a[r].frequency<a[min].frequency) 
+		min=r; 
+		
+                
+                if(min!=k)  
+		{
+		   ArrayNode temp=a[k];
+	      a[k]=a[min];
+	      a[min]=temp;
+		   minheapify(a,min);  // Recursively heapify the affected sub-tree
+		}
+		return;
+	}
+    
+   //Here you perform min heapify on all nodes except the leaf nodes 
+	void build_minheap(ArrayNode a[],int count)
+	{
+		int j=count/2; 
+	    while(j>=1)
+		{
+		minheapify(a,j);
+		j--;
+	    }
+	}
+
+//By preorder traversal you will be able to deduce the actual shape of the tree	
+static String preorder(char ch, int arr[],ArrayNode head){ 
+		if(head==null){
+			w--;
+			return s;
+		}
+		huffman[z]=ch;
+		binary[z]="";
+		if(head.letter==ch){
+			for(int i=0;i<w;i++){
+				binary[z]+=arr[i];
+			}
+			binformat.put(ch,binary[z]);
+			System.out.println(ch+" -> "+binary[z]);
+                       
+			z++;
+			return s;
+		}
+		arr[w++]=0;
+		preorder(ch,arr,head.left); 
+		arr[w++]=1;
+		preorder(ch,arr,head.right);
+		w--;
+		return s;
+		
+	}
+	
+
+            //Function to extract min element in terms of frequency
+	static ArrayNode HeapExtractMin(ArrayNode a[]) 
+	{ 
+		ArrayNode temp = new ArrayNode();
+	temp.letter= a[1].letter;
+	temp.frequency= a[1].frequency;
+	temp.right=a[1].right;
+	temp.left=a[1].left;
+	 a[1] = a[count];
+	  count--;
+	  minheapify(a,1);
+	   return temp; 
+	   }
+        
+        //Inserting Elements in Min Heap
+	void Min_Heap_Insert(ArrayNode a[],ArrayNode first,ArrayNode second)
+	{
+	   ArrayNode temp = new ArrayNode();  
+	   temp.frequency=first.frequency+second.frequency;   
+	   temp.letter='$';
+	   temp.left=first;
+	   temp.right=second;
+	   a[++count]=temp; 
+		build_minheap(a,count);
+	}	
+
+        
+        //It Decode the huffman encoded data to its orignal form.
+	public static String decode_huff(ArrayNode root,String s){
+		char a []= s.toCharArray();
+	    ArrayNode temp=root;  //for decoding we start with root node
+	    if(root==null)
+	        return null;
+	    int i,l=s.length();
+	    if(l==0){
+	        return null;
+	    }
+	    for(i=0;i<l;i++){
+	        if(a[i]=='1'){ 
+	            root=root.right;  
+	            if(root.letter!='$'){    
+	                decodedstr+=root.letter;  
+                        
+	                root=temp;}
+	        }
+	        else{
+	            root=root.left;  
+	            if(root.letter!='$'){ 
+                        decodedstr+=root.letter; 
+	                root=temp;}
+	        }
+	    }
+            return decodedstr;
+	}
+        
+        
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+        
+     //initComponents method is a GUI method which shows our selection in GUI Window.
+        
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        TextField_EnterFilePath = new javax.swing.JTextField();
+        Search = new javax.swing.JButton();
+        ZipFile = new javax.swing.JButton();
+        Close = new javax.swing.JButton();
+        UnZipFile = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Shaveena Khan Huffman File Zipper");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+
+        jLabel1.setBackground(new java.awt.Color(255, 204, 204));
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        jLabel1.setText("WELCOME TO HUFFMAN FILE ZIPPER AND FILE UNZIPPER");
+        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel1.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
+        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        jLabel2.setText("Path");
+        jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        TextField_EnterFilePath.setFont(new java.awt.Font("SansSerif", 2, 12)); // NOI18N
+        TextField_EnterFilePath.setForeground(new java.awt.Color(153, 153, 153));
+        TextField_EnterFilePath.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        TextField_EnterFilePath.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                TextField_EnterFilePathFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                TextField_EnterFilePathFocusLost(evt);
+            }
+        });
+
+        Search.setBackground(new java.awt.Color(204, 204, 255));
+        Search.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        Search.setForeground(new java.awt.Color(102, 102, 102));
+        Search.setText("Search");
+        Search.setActionCommand("Search");
+        Search.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true));
+        Search.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Search.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SearchActionPerformed(evt);
+            }
+        });
+
+        ZipFile.setBackground(new java.awt.Color(204, 204, 255));
+        ZipFile.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        ZipFile.setForeground(new java.awt.Color(102, 102, 102));
+        ZipFile.setText("Zip File");
+        ZipFile.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true));
+        ZipFile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        ZipFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ZipFileActionPerformed(evt);
+            }
+        });
+
+        Close.setBackground(new java.awt.Color(204, 204, 255));
+        Close.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        Close.setForeground(new java.awt.Color(102, 102, 102));
+        Close.setText("Close");
+        Close.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true));
+        Close.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Close.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CloseActionPerformed(evt);
+            }
+        });
+
+        UnZipFile.setBackground(new java.awt.Color(204, 204, 255));
+        UnZipFile.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        UnZipFile.setForeground(new java.awt.Color(102, 102, 102));
+        UnZipFile.setText("UnZip File");
+        UnZipFile.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true));
+        UnZipFile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        UnZipFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UnZipFileActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(141, 141, 141)
+                .addComponent(ZipFile, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(UnZipFile, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(93, 93, 93))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(Close, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(235, 235, 235))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
+                        .addComponent(TextField_EnterFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(Search, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 718, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(TextField_EnterFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Search, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(47, 47, 47)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ZipFile, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(UnZipFile, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40)
+                .addComponent(Close, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void TextField_EnterFilePathFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TextField_EnterFilePathFocusGained
+        // TODO add your handling code here:
+       
+    }//GEN-LAST:event_TextField_EnterFilePathFocusGained
+
+    private void TextField_EnterFilePathFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TextField_EnterFilePathFocusLost
+       
+        
+    }//GEN-LAST:event_TextField_EnterFilePathFocusLost
+//Searching the file using gui button
+    private void SearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchActionPerformed
+        // TODO add your handling code here:
+        try{
+            JFileChooser chooser = new JFileChooser();
+        chooser.showOpenDialog(null);
+        File f = chooser.getSelectedFile();
+        file_path=f.getAbsolutePath();
+        TextField_EnterFilePath.setText(file_path);
+            content = new Scanner(new File(file_path)).useDelimiter("\\Z").next();
+            //System.out.println(content);
+        }catch(Exception e){
+        JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_SearchActionPerformed
+
+    
+    //Gui button functionality for File Zipping by Huffman Coding
+    private void ZipFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ZipFileActionPerformed
+        // TODO add your handling code here:
+        try{
+        HuffmanArray obj1 = new HuffmanArray();
+        
+	char actual[] = content.toCharArray();
+        l = content.length(); 
+        System.out.print("Size: "+ l);
+	Map<Character, Integer> m = new HashMap<Character, Integer>();
+	for(int i=0;i<l;i++){
+		char c = actual[i];
+		if(m.containsKey(c))
+			m.put(c, m.get(c)+1);
+		else{
+			m.put(c,1);
+			count++;
+                }
+        }
+        
+                 ShaveenaKhan_Huffman obj2= new ShaveenaKhan_Huffman(count);
+         
+        int frequency[] = new int[count+1];
+	char letter[] = new char[count+1];
+	Set<Character> keyc = m.keySet();
+	j=0;
+		for (Character key : keyc){
+			char q = key;
+		    System.out.println(q+"="+m.get(q));
+                    letterfreq += q+" -> "+m.get(q)+'\n'; 
+		    frequency[j]=m.get(q);
+		    letter[j++]=q;
+		}
+
+	a = new ArrayNode[count+1];
+	obj1.create_array(letter,frequency,a,count);
+	obj2.build_minheap(a,count);
+        
+	while(count!=1) //// Iterate while size of heap doesn't become 1
+	{
+           
+           	ArrayNode first = HeapExtractMin(a);
+		ArrayNode second= HeapExtractMin(a);
+		obj2.Min_Heap_Insert(a, first, second);
+	}
+      
+	for(int i=0;i<letter.length;i++){
+		w=0;
+		preorder(letter[i],arr,a[1]);
+	}
+	for(int i=0;i<actual.length;i++){
+		char q = actual[i];
+		s+=binformat.get(q); 
+	}
+        
+	System.out.println("Compression Ratio:");
+        FileWriter stream = new FileWriter(file_path);
+		BufferedWriter out = new BufferedWriter(stream);
+		out.write(s);
+		out.close();
+        JOptionPane.showMessageDialog(null, "Your File Zipped successfully");
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(null, e);
+		}
+        
+    
+        
+    }//GEN-LAST:event_ZipFileActionPerformed
+
+    //Gui button functionality for File Unzipping by Huffman Coding
+    private void UnZipFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UnZipFileActionPerformed
+        // TODO add your handling code here:
+        try{
+        JFileChooser cho = new JFileChooser();
+        cho.showOpenDialog(null);
+        File fil = cho.getSelectedFile();
+        file_path=fil.getAbsolutePath();
+            newdata = new Scanner(new File(file_path)).useDelimiter("\\Z").next();
+            newdata= decode_huff(a[1],newdata);
+          
+            FileWriter stream = new FileWriter(file_path);
+            BufferedWriter out = new BufferedWriter(stream);
+            out.write(newdata);
+            out.close();
+            JOptionPane.showMessageDialog(null, "Your File UnZipped successfully");
+        }catch(Exception e){
+        JOptionPane.showMessageDialog(null, e);}       
+        //print decodedstr on screen
+    }//GEN-LAST:event_UnZipFileActionPerformed
+
+    private void CloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CloseActionPerformed
+        // TODO add your handling code here:
+        close();
+    }//GEN-LAST:event_CloseActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ShaveenaKhan_Huffman.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ShaveenaKhan_Huffman.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ShaveenaKhan_Huffman.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ShaveenaKhan_Huffman.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ShaveenaKhan_Huffman.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ShaveenaKhan_Huffman.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ShaveenaKhan_Huffman.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ShaveenaKhan_Huffman.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new ShaveenaKhan_Huffman().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Close;
+    private javax.swing.JButton Search;
+    private javax.swing.JTextField TextField_EnterFilePath;
+    private javax.swing.JButton UnZipFile;
+    private javax.swing.JButton ZipFile;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    // End of variables declaration//GEN-END:variables
+}
